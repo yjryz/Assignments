@@ -1,12 +1,17 @@
-function insertMyElement(type, className, textContent) {
+function createElementHelper(type, className = "", textContent = "") {
   const ele = document.createElement(type);
   ele.className = className;
   ele.textContent = textContent;
-  document.body.appendChild(ele);
+  return ele;
 }
 
-insertMyElement("h1", "topic", "HW 3");
-insertMyElement("h2", "topic", "Yi (Zoe) Ji");
+const allElements = [];
+
+const topic = createElementHelper("h1", "topic", "HW 3");
+allElements.push(topic);
+
+const myName = createElementHelper("h2", "topic", "Yi (Zoe) Ji");
+allElements.push(myName);
 
 /*
 
@@ -15,6 +20,13 @@ Question 1
 Given the following array and implement the table dynamically
 
 */
+
+const qustionOneTopic = createElementHelper(
+  "h3",
+  "question",
+  "Question 1. Table with your styles"
+);
+allElements.push(qustionOneTopic);
 
 const tableInfo = {
   tableHeader: ["Student Name", "Age", "Phone", "Address"],
@@ -46,38 +58,41 @@ const tableInfo = {
   ],
 };
 
-function buildTableHeader(tableHeader, table) {
-  let tr = document.createElement("tr");
+function buildTableHeader(tableHeader) {
+  const tr = document.createElement("tr");
   tr.id = "head";
-  table.appendChild(tr);
   tableHeader.forEach((header) => {
-    let th = document.createElement("th");
+    const th = document.createElement("th");
     th.textContent = header;
     tr.appendChild(th);
   });
+  return tr;
 }
 
-function buildTableData(tableInfo, table) {
+function buildTableData(tableInfo) {
+  tableRows = [];
   tableInfo.tableContent.forEach((student) => {
-    let tr = document.createElement("tr");
-    table.appendChild(tr);
+    const tr = document.createElement("tr");
+    tableRows.push(tr);
     tableInfo.tableHeader.forEach((header) => {
-      let td = document.createElement("td");
+      const td = document.createElement("td");
       td.textContent = student[header];
       tr.appendChild(td);
     });
   });
+  return tableRows;
 }
 
 function buildTable(tableInfo) {
   const myTable = document.createElement("table");
-  document.body.appendChild(myTable);
-  buildTableHeader(tableInfo.tableHeader, myTable);
-  buildTableData(tableInfo, myTable);
+  const tableHeader = buildTableHeader(tableInfo.tableHeader);
+  const tableData = buildTableData(tableInfo);
+  myTable.append(tableHeader, ...tableData);
+  return myTable;
 }
 
-insertMyElement("h3", "question", "Question 1. Table with your styles");
-buildTable(tableInfo);
+const studentTable = buildTable(tableInfo);
+allElements.push(studentTable);
 
 /*
   
@@ -85,26 +100,36 @@ buildTable(tableInfo);
   Given the array and generate order list and unordered list dynamically as following:
   
   */
+const qustionTwoTopic = createElementHelper(
+  "h3",
+  "question",
+  "Question 2. Ordered and unordered list"
+);
+allElements.push(qustionTwoTopic);
 
 const list = ["HTML", "JavaScript", "CSS", "React", "Redux", "Java"];
 
 function createList(list, type, className) {
+  div = document.createElement("div");
   text = `An ${className} technologies list`;
-  insertMyElement("h4", className, text);
+  div.appendChild(createElementHelper("h4", className, text));
 
   const myList = document.createElement(type);
   myList.className = className;
-  document.body.appendChild(myList);
+  div.appendChild(myList);
   list.forEach((ele) => {
-    let li = document.createElement("li");
+    const li = document.createElement("li");
     li.textContent = ele;
     myList.appendChild(li);
   });
+  return div;
 }
 
-insertMyElement("h3", "question", "Question 2. Ordered and unordered list");
-createList(list, "ol", "ordered");
-createList(list, "ul", "unordered");
+const orderedList = createList(list, "ol", "ordered");
+allElements.push(orderedList);
+
+const unorderedList = createList(list, "ul", "unordered");
+allElements.push(unorderedList);
 
 /*
   
@@ -113,6 +138,12 @@ createList(list, "ul", "unordered");
   FYI: use 'value' in the object as the value attribute in the option tag when you create the dropdown list
   
   */
+const qustionThreeTopic = createElementHelper(
+  "h3",
+  "question",
+  "Question 3. Dropdown list"
+);
+allElements.push(qustionThreeTopic);
 
 const dropDownList = [
   { value: "newark", content: "Newark" },
@@ -125,15 +156,16 @@ const dropDownList = [
 
 function createSelect(dropDownList) {
   const select = document.createElement("select");
-  document.body.appendChild(select);
   dropDownList.forEach((ele) => {
-    let option = document.createElement("option");
+    const option = document.createElement("option");
     option.value = ele.value;
     option.textContent = ele.content;
-    console.log(option);
     select.appendChild(option);
   });
+  return select;
 }
 
-insertMyElement("h3", "question", "Question 3. Dropdown list");
-createSelect(dropDownList);
+const selectCity = createSelect(dropDownList);
+allElements.push(selectCity);
+
+document.body.append(...allElements);
